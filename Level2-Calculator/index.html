@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NEON CALC — RX-80</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Animated grid background -->
+  <div class="bg-grid"></div>
+  <div class="bg-horizon"></div>
+  <div class="scanlines"></div>
+  <div class="stars" id="stars"></div>
+
+  <main class="wrapper">
+    <div class="calc-shell">
+
+      <!-- Brand strip -->
+      <div class="brand-strip">
+        <span class="brand-model">RX<span class="brand-dash">—</span>80</span>
+        <span class="brand-name">NEON CALC</span>
+        <span class="brand-led">
+          <span class="led"></span>
+          <span class="led"></span>
+          <span class="led blink"></span>
+        </span>
+      </div>
+
+      <!-- Display cassette -->
+      <div class="display-cassette">
+        <div class="cassette-screw screw-tl"></div>
+        <div class="cassette-screw screw-tr"></div>
+        <div class="display-inner">
+          <div class="display-meta">
+            <span class="display-label">OUTPUT</span>
+            <span class="display-mode" id="modeLabel">READY</span>
+          </div>
+          <div class="expression-row" id="expression">&nbsp;</div>
+          <div class="display-screen" id="display">0</div>
+        </div>
+        <div class="cassette-screw screw-bl"></div>
+        <div class="cassette-screw screw-br"></div>
+      </div>
+
+      <!-- Button panel -->
+      <div class="btn-panel">
+
+        <div class="btn-row row-func">
+          <button class="btn b-func" data-action="clear" id="clearBtn">CLR</button>
+          <button class="btn b-func" data-action="sign">±</button>
+          <button class="btn b-func" data-action="percent">%</button>
+          <button class="btn b-op"   data-action="operator" data-value="÷">÷</button>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn b-num" data-action="number" data-value="7">7</button>
+          <button class="btn b-num" data-action="number" data-value="8">8</button>
+          <button class="btn b-num" data-action="number" data-value="9">9</button>
+          <button class="btn b-op"  data-action="operator" data-value="×">×</button>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn b-num" data-action="number" data-value="4">4</button>
+          <button class="btn b-num" data-action="number" data-value="5">5</button>
+          <button class="btn b-num" data-action="number" data-value="6">6</button>
+          <button class="btn b-op"  data-action="operator" data-value="−">−</button>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn b-num" data-action="number" data-value="1">1</button>
+          <button class="btn b-num" data-action="number" data-value="2">2</button>
+          <button class="btn b-num" data-action="number" data-value="3">3</button>
+          <button class="btn b-op"  data-action="operator" data-value="+">+</button>
+        </div>
+
+        <div class="btn-row row-bottom">
+          <button class="btn b-num b-zero" data-action="number" data-value="0">0</button>
+          <button class="btn b-num"        data-action="decimal">.</button>
+          <button class="btn b-eq"         data-action="equals">=</button>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="footer-tape">
+        <span>SOLAR PWR ☀ DC 9V</span>
+        <span>© 1982 SYNTHCORP</span>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
