@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartSlice – Pizza Delivery Platform</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+<!-- ===========================
+     TOAST NOTIFICATIONS
+     =========================== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ===========================
+     NAVIGATION BAR
+     (Hidden on login/register pages)
+     =========================== -->
+<nav class="navbar" id="navbar" style="display:none;">
+  <a class="nav-logo" onclick="showPage('home')">
+    <div class="logo-icon">🍕</div>
+    <span class="logo-text">Smart<span>Slice</span></span>
+  </a>
+
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')" id="nav-home">Home</a></li>
+    <li><a onclick="showPage('menu')" id="nav-menu">Menu</a></li>
+    <li><a onclick="showPage('tracking')" id="nav-track">Track Order</a></li>
+    <li><a onclick="showPage('admin')" id="nav-admin">Admin</a></li>
+  </ul>
+
+  <div class="nav-right">
+    <!-- Cart button with item count badge -->
+    <button class="cart-btn" onclick="showPage('cart')">
+      🛒 Cart
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+    <!-- User display & logout -->
+    <span style="color:var(--text-secondary);font-size:0.85rem;" id="navUserName"></span>
+    <button class="btn-secondary" style="padding:8px 16px;font-size:0.85rem;" onclick="logout()">Logout</button>
+  </div>
+</nav>
+
+<!-- ===========================
+     PAGE: LOGIN
+     =========================== -->
+<div class="page active" id="page-login">
+  <div class="auth-page">
+    <div class="auth-bg"></div>
+    <div class="auth-bg-pizza">🍕</div>
+
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="logo-icon-big">🍕</div>
+        <h1>Smart<span>Slice</span></h1>
+        <p>Pizza Delivery Platform</p>
+      </div>
+
+      <h2 class="auth-title">Welcome back 👋</h2>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <div class="input-wrap">
+          <input type="email" id="loginEmail" placeholder="you@example.com" />
+          <i class="fa fa-envelope input-icon"></i>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrap">
+          <input type="password" id="loginPassword" placeholder="••••••••" />
+          <!-- Toggle show/hide password -->
+          <i class="fa fa-eye input-icon" id="loginPasswordToggle" onclick="togglePassword('loginPassword','loginPasswordToggle')"></i>
+        </div>
+      </div>
+
+      <button class="btn-primary" style="width:100%;margin-top:0.5rem;" onclick="login()">
+        <i class="fa fa-sign-in-alt"></i> Sign In
+      </button>
+
+      <div class="auth-footer">
+        Don't have an account? <a onclick="showPage('register')">Create one</a>
+      </div>
+      <div class="auth-footer" style="margin-top:6px;">
+        <a onclick="showPage('admin')" style="color:var(--text-muted);font-size:0.8rem;">Admin Panel →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===========================
+     PAGE: REGISTER
+     =========================== -->
+<div class="page" id="page-register">
+  <div class="auth-page">
+    <div class="auth-bg"></div>
+    <div class="auth-bg-pizza">🍕</div>
+
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="logo-icon-big">🍕</div>
+        <h1>Smart<span>Slice</span></h1>
+        <p>Pizza Delivery Platform</p>
+      </div>
+
+      <h2 class="auth-title">Create account 🚀</h2>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <div class="input-wrap">
+            <input type="text" id="regFirst" placeholder="John" />
+            <i class="fa fa-user input-icon"></i>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <div class="input-wrap">
+            <input type="text" id="regLast" placeholder="Doe" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <div class="input-wrap">
+          <input type="email" id="regEmail" placeholder="you@example.com" />
+          <i class="fa fa-envelope input-icon"></i>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrap">
+          <input type="password" id="regPassword" placeholder="Min. 6 characters" />
+          <i class="fa fa-eye input-icon" id="regPasswordToggle" onclick="togglePassword('regPassword','regPasswordToggle')"></i>
+        </div>
+      </div>
+
+      <button class="btn-primary" style="width:100%;" onclick="register()">
+        <i class="fa fa-user-plus"></i> Create Account
+      </button>
+
+      <div class="auth-footer">
+        Already have an account? <a onclick="showPage('login')">Sign in</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===========================
+     PAGE: HOME
+     =========================== -->
+<div class="page" id="page-home">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="badge">
+          <span>🔥</span> Now delivering in 30 minutes
+        </div>
+
+        <h1>
+          Fresh<br />
+          <span class="highlight">Pizza</span><br />
+          Delivered Fast
+        </h1>
+
+        <p>
+          Handcrafted with premium ingredients, baked to perfection,
+          and delivered hot to your door. Customize every slice your way.
+        </p>
+
+        <div class="hero-cta">
+          <button class="btn-primary" onclick="showPage('menu')">
+            <i class="fa fa-utensils"></i> Browse Menu
+          </button>
+          <button class="btn-secondary" onclick="showPage('tracking')">
+            <i class="fa fa-location-dot"></i> Track Order
+          </button>
+        </div>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="num">50+</div>
+            <div class="label">Pizza varieties</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num">30m</div>
+            <div class="label">Avg delivery</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num">4.9★</div>
+            <div class="label">Rating</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Animated pizza visual -->
+      <div class="hero-visual">
+        <div class="pizza-spinner">
+          <div class="pizza-glow-ring"></div>
+          <span class="pizza-emoji-big">🍕</span>
+
+          <!-- Floating info tags -->
+          <div class="floating-tags">
+            <div class="float-tag">🔥 Freshly Baked</div>
+            <div class="float-tag">⚡ 30 min Delivery</div>
+            <div class="float-tag">⭐ Premium Cheese</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="section-header">
+      <span class="section-label">Why SmartSlice</span>
+      <h2>The Smarter Way to Pizza</h2>
+      <p>We combine fresh ingredients, fast delivery and smart technology for the ultimate pizza experience.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🍕</div>
+        <h3>Fresh Ingredients</h3>
+        <p>We source only premium, fresh ingredients daily — no shortcuts, no compromises on quality.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Lightning Fast Delivery</h3>
+        <p>Our optimized delivery network ensures your pizza arrives hot within 30 minutes or less.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎨</div>
+        <h3>Full Customization</h3>
+        <p>Choose your size, sauce, cheese and toppings. Build your perfect pizza, every single time.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📍</div>
+        <h3>Live Order Tracking</h3>
+        <p>Watch your order go from oven to doorstep with real-time status updates and ETA.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===========================
+     PAGE: MENU
+     =========================== -->
+<div class="page" id="page-menu">
+  <div class="menu-header">
+    <h1>Our <span style="color:var(--accent-red)">Menu</span></h1>
+    <p style="color:var(--text-secondary);">Handcrafted pizzas for every craving</p>
+  </div>
+
+  <!-- Category filter buttons -->
+  <div class="menu-filters">
+    <button class="filter-btn active" onclick="filterMenu('all', this)">🍕 All Pizzas</button>
+    <button class="filter-btn" onclick="filterMenu('veg', this)">🥦 Vegetarian</button>
+    <button class="filter-btn" onclick="filterMenu('non-veg', this)">🍖 Non-Veg</button>
+    <button class="filter-btn" onclick="filterMenu('special', this)">⭐ Specials</button>
+  </div>
+
+  <!-- Pizza cards grid — populated by JS -->
+  <div class="menu-grid" id="menuGrid"></div>
+</div>
+
+<!-- ===========================
+     CUSTOMIZATION MODAL
+     =========================== -->
+<div class="modal-overlay" id="customModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalPizzaName">Customize Your Pizza</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Left: Live Preview -->
+      <div class="custom-preview">
+        <span class="custom-pizza-emoji" id="previewEmoji">🍕</span>
+        <div class="custom-preview-info">
+          <h3 id="previewName">Pizza Name</h3>
+          <div class="custom-price-display" id="previewPrice">₹299</div>
+        </div>
+
+        <!-- Dynamic breakdown of chosen options -->
+        <div class="selected-options" id="selectedOptionsDisplay"></div>
+      </div>
+
+      <!-- Right: Customization Options -->
+      <div class="custom-options">
+        <!-- Size Selection -->
+        <h4>Choose Size</h4>
+        <div class="size-options">
+          <button class="size-btn active" onclick="selectSize(this,'Small',0)" data-price="0">
+            <span class="size-name">🍕 Small</span>
+            <span class="size-price">7 inch</span>
+          </button>
+          <button class="size-btn" onclick="selectSize(this,'Medium',80)" data-price="80">
+            <span class="size-name">🍕 Medium</span>
+            <span class="size-price">+₹80</span>
+          </button>
+          <button class="size-btn" onclick="selectSize(this,'Large',160)" data-price="160">
+            <span class="size-name">🍕 Large</span>
+            <span class="size-price">+₹160</span>
+          </button>
+        </div>
+
+        <!-- Sauce Type -->
+        <h4>Sauce Type</h4>
+        <select class="option-select" id="sauceSelect" onchange="updatePreview()">
+          <option value="Classic Tomato">🍅 Classic Tomato</option>
+          <option value="BBQ">🔥 BBQ Sauce</option>
+          <option value="Pesto">🌿 Pesto</option>
+          <option value="Alfredo">🧈 Alfredo</option>
+          <option value="Spicy Arrabbiata">🌶️ Spicy Arrabbiata</option>
+        </select>
+
+        <!-- Cheese Type -->
+        <h4>Cheese Type</h4>
+        <select class="option-select" id="cheeseSelect" onchange="updatePreview()">
+          <option value="Mozzarella">🧀 Mozzarella (Classic)</option>
+          <option value="Cheddar">Cheddar</option>
+          <option value="Gouda">Gouda</option>
+          <option value="Double Mozzarella">🧀🧀 Double Mozzarella (+₹40)</option>
+          <option value="Vegan Cheese">🌱 Vegan Cheese</option>
+        </select>
+
+        <!-- Toppings -->
+        <h4>Extra Toppings (+₹30 each)</h4>
+        <div class="toppings-grid" id="toppingsGrid">
+          <!-- Topping buttons generated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <!-- Quantity control -->
+      <div class="qty-control">
+        <button class="qty-btn" onclick="changeQty(-1)">−</button>
+        <span class="qty-display" id="qtyDisplay">1</span>
+        <button class="qty-btn" onclick="changeQty(1)">+</button>
+      </div>
+
+      <button class="btn-primary" onclick="addToCartFromModal()">
+        <i class="fa fa-cart-plus"></i> Add to Cart – <span id="modalTotal">₹299</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===========================
+     PAGE: CART
+     =========================== -->
+<div class="page" id="page-cart">
+  <div class="page-container">
+    <h1 class="page-title">Your <span style="color:var(--accent-red)">Cart</span></h1>
+
+    <div class="cart-layout">
+      <!-- Cart Items List -->
+      <div id="cartItemsContainer">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Order Summary Sidebar -->
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="summarySubtotal">₹0</span>
+        </div>
+        <div class="summary-row">
+          <span>Delivery Fee</span>
+          <span id="summaryDelivery">₹40</span>
+        </div>
+        <div class="summary-row">
+          <span>Taxes (5%)</span>
+          <span id="summaryTax">₹0</span>
+        </div>
+        <div class="summary-row">
+          <span>Discount</span>
+          <span id="summaryDiscount" style="color:var(--success);">-₹0</span>
+        </div>
+
+        <!-- Promo code input -->
+        <div class="promo-input">
+          <input type="text" id="promoCode" placeholder="Promo code" />
+          <button onclick="applyPromo()">Apply</button>
+        </div>
+
+        <div class="summary-row total">
+          <span>Total</span>
+          <span class="amount" id="summaryTotal">₹0</span>
+        </div>
+
+        <button class="btn-primary" style="width:100%;margin-top:1.5rem;" onclick="showPage('checkout')">
+          Proceed to Checkout <i class="fa fa-arrow-right"></i>
+        </button>
+
+        <button class="btn-secondary" style="width:100%;margin-top:0.75rem;" onclick="showPage('menu')">
+          <i class="fa fa-arrow-left"></i> Continue Shopping
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===========================
+     PAGE: CHECKOUT
+     =========================== -->
+<div class="page" id="page-checkout">
+  <div class="page-container">
+    <h1 class="page-title">Check<span style="color:var(--accent-red)">out</span></h1>
+
+    <div class="checkout-layout">
+      <!-- Left Column: Delivery + Payment -->
+      <div>
+        <!-- Delivery Details -->
+        <div class="checkout-section">
+          <h3>
+            <span class="step-num">1</span>
+            Delivery Details
+          </h3>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name</label>
+              <div class="input-wrap">
+                <input type="text" id="deliveryName" placeholder="John Doe" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <div class="input-wrap">
+                <input type="tel" id="deliveryPhone" placeholder="+91 9999999999" />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Street Address</label>
+            <div class="input-wrap">
+              <input type="text" id="deliveryAddress" placeholder="123 Main Street, Apt 4B" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>City</label>
+              <div class="input-wrap">
+                <input type="text" id="deliveryCity" placeholder="Mumbai" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>PIN Code</label>
+              <div class="input-wrap">
+                <input type="text" id="deliveryPin" placeholder="400001" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="checkout-section">
+          <h3>
+            <span class="step-num">2</span>
+            Payment Method
+          </h3>
+
+          <div class="payment-options">
+            <!-- Credit/Debit Card -->
+            <div class="payment-option selected" onclick="selectPayment(this, 'card')" id="pay-card">
+              <div class="pay-icon">💳</div>
+              <div class="pay-info">
+                <div class="pay-name">Credit / Debit Card</div>
+                <div class="pay-desc">Visa, Mastercard, RuPay</div>
+              </div>
+              <div class="pay-check">✓</div>
+            </div>
+
+            <!-- UPI -->
+            <div class="payment-option" onclick="selectPayment(this, 'upi')" id="pay-upi">
+              <div class="pay-icon">📱</div>
+              <div class="pay-info">
+                <div class="pay-name">UPI</div>
+                <div class="pay-desc">GPay, PhonePe, Paytm</div>
+              </div>
+              <div class="pay-check">✓</div>
+            </div>
+
+            <!-- Cash on Delivery -->
+            <div class="payment-option" onclick="selectPayment(this, 'cod')" id="pay-cod">
+              <div class="pay-icon">💵</div>
+              <div class="pay-info">
+                <div class="pay-name">Cash on Delivery</div>
+                <div class="pay-desc">Pay when you receive</div>
+              </div>
+              <div class="pay-check">✓</div>
+            </div>
+          </div>
+
+          <!-- Card fields (shown when card is selected) -->
+          <div id="cardFields" style="margin-top:1rem;">
+            <div class="form-group">
+              <label>Card Number</label>
+              <div class="input-wrap">
+                <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCard(this)" />
+                <i class="fa fa-credit-card input-icon"></i>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Expiry Date</label>
+                <div class="input-wrap">
+                  <input type="text" placeholder="MM/YY" maxlength="5" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>CVV</label>
+                <div class="input-wrap">
+                  <input type="password" placeholder="•••" maxlength="3" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Order Summary -->
+      <div>
+        <div class="checkout-section">
+          <h3>Order Summary</h3>
+          <div id="checkoutOrderItems"></div>
+          <hr style="border-color:var(--border-color);margin:1rem 0;" />
+          <div class="summary-row"><span>Subtotal</span><span id="coSubtotal">₹0</span></div>
+          <div class="summary-row"><span>Delivery</span><span>₹40</span></div>
+          <div class="summary-row"><span>Tax (5%)</span><span id="coTax">₹0</span></div>
+          <div class="summary-row total">
+            <span>Total</span>
+            <span class="amount" id="coTotal">₹0</span>
+          </div>
+
+          <button class="btn-primary" style="width:100%;margin-top:1.5rem;" onclick="placeOrder()">
+            <i class="fa fa-check-circle"></i> Place Order
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Payment Loading Overlay -->
+<div class="payment-loading" id="paymentLoading">
+  <div class="loading-spinner"></div>
+  <p style="color:var(--text-secondary);font-weight:600;">Processing your payment...</p>
+</div>
+
+<!-- Payment Success Overlay -->
+<div class="payment-success" id="paymentSuccess">
+  <div class="success-icon">✓</div>
+  <h2>Payment Successful!</h2>
+  <p style="color:var(--text-secondary);">Your order has been placed</p>
+  <p style="color:var(--text-muted);font-family:var(--font-mono);font-size:0.85rem;" id="successOrderId"></p>
+  <button class="btn-primary" style="margin-top:1.5rem;" onclick="goToTracking()">
+    <i class="fa fa-location-dot"></i> Track Your Order
+  </button>
+</div>
+
+<!-- ===========================
+     PAGE: ORDER TRACKING
+     =========================== -->
+<div class="page" id="page-tracking">
+  <div class="tracking-container">
+    <div class="tracking-header">
+      <h1>Track <span style="color:var(--accent-red)">Order</span></h1>
+      <div class="order-id" id="trackingOrderId">Order #SS-000000</div>
+    </div>
+
+    <span class="tracking-pizza" id="trackingEmoji">🍕</span>
+
+    <!-- Progress Steps -->
+    <div class="tracking-steps" id="trackingSteps">
+      <div class="tracking-progress-line" id="progressLine" style="height:0;"></div>
+
+      <div class="tracking-step" id="step-0">
+        <div class="step-node">📋</div>
+        <div class="step-content">
+          <div class="step-title">Order Placed</div>
+          <div class="step-time" id="step-time-0">—</div>
+        </div>
+      </div>
+
+      <div class="tracking-step" id="step-1">
+        <div class="step-node">👨‍🍳</div>
+        <div class="step-content">
+          <div class="step-title">Preparing Pizza</div>
+          <div class="step-time" id="step-time-1">—</div>
+        </div>
+      </div>
+
+      <div class="tracking-step" id="step-2">
+        <div class="step-node">🔥</div>
+        <div class="step-content">
+          <div class="step-title">Baking in Oven</div>
+          <div class="step-time" id="step-time-2">—</div>
+        </div>
+      </div>
+
+      <div class="tracking-step" id="step-3">
+        <div class="step-node">🛵</div>
+        <div class="step-content">
+          <div class="step-title">Out for Delivery</div>
+          <div class="step-time" id="step-time-3">—</div>
+        </div>
+      </div>
+
+      <div class="tracking-step" id="step-4">
+        <div class="step-node">🏠</div>
+        <div class="step-content">
+          <div class="step-title">Delivered!</div>
+          <div class="step-time" id="step-time-4">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ETA Card -->
+    <div class="eta-card">
+      <div class="eta-num" id="etaMinutes">25</div>
+      <div class="eta-label">Estimated minutes remaining</div>
+      <div style="margin-top:0.5rem;color:var(--text-muted);font-size:0.85rem;" id="etaAddress">
+        Delivering to your address
+      </div>
+    </div>
+
+    <button class="btn-secondary" style="margin-top:1.5rem;" onclick="showPage('home')">
+      <i class="fa fa-house"></i> Back to Home
+    </button>
+  </div>
+</div>
+
+<!-- ===========================
+     PAGE: ADMIN DASHBOARD
+     =========================== -->
+<div class="page" id="page-admin">
+  <div class="admin-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="admin-sidebar">
+      <div style="font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:1rem;">
+        Admin Panel
+      </div>
+      <ul class="admin-nav">
+        <li><a class="active" onclick="switchAdminTab('dashboard', this)">📊 Dashboard</a></li>
+        <li><a onclick="switchAdminTab('orders', this)">📦 Orders</a></li>
+        <li><a onclick="switchAdminTab('inventory', this)">🗃️ Inventory</a></li>
+        <li><a onclick="switchAdminTab('menu-mgmt', this)">🍕 Menu Management</a></li>
+        <li>
+          <a onclick="showPage('home')" style="margin-top:2rem;border-top:1px solid var(--border-color);padding-top:0.75rem;">
+            ← Back to App
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <!-- DASHBOARD TAB -->
+      <div class="admin-tab active" id="admin-tab-dashboard">
+        <div class="admin-title">Dashboard</div>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-icon">📦</div>
+            <div class="stat-num" id="statTotalOrders">0</div>
+            <div class="stat-label">Total Orders</div>
+            <div class="stat-change">↑ 12% this week</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-num" id="statDelivered">0</div>
+            <div class="stat-label">Delivered</div>
+            <div class="stat-change">↑ 8% this week</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-num" id="statPending">0</div>
+            <div class="stat-label">Pending</div>
+            <div class="stat-change" style="color:var(--warning);">— Active now</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-num" id="statRevenue">₹0</div>
+            <div class="stat-label">Revenue</div>
+            <div class="stat-change">↑ 20% this month</div>
+          </div>
+        </div>
+
+        <!-- Recent Orders Quick View -->
+        <div class="data-table">
+          <div class="data-table-header">
+            <h3>Recent Orders</h3>
+            <button class="action-btn" onclick="switchAdminTab('orders', document.querySelector('.admin-nav a:nth-child(2)'))">
+              View All →
+            </button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="recentOrdersBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ORDERS TAB -->
+      <div class="admin-tab" id="admin-tab-orders">
+        <div class="admin-title">All Orders</div>
+        <div class="data-table">
+          <div class="data-table-header">
+            <h3>Order Management</h3>
+            <span style="font-size:0.85rem;color:var(--text-muted);" id="ordersCount">0 orders</span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Address</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Update</th>
+              </tr>
+            </thead>
+            <tbody id="allOrdersBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- INVENTORY TAB -->
+      <div class="admin-tab" id="admin-tab-inventory">
+        <div class="admin-title">Inventory</div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+          <p style="color:var(--text-secondary);font-size:0.9rem;">Track stock levels for all ingredients</p>
+          <button class="btn-primary" onclick="restockAll()" style="padding:10px 20px;font-size:0.85rem;">
+            🔄 Restock All
+          </button>
+        </div>
+
+        <div class="inventory-grid" id="inventoryGrid"></div>
+      </div>
+
+      <!-- MENU MANAGEMENT TAB -->
+      <div class="admin-tab" id="admin-tab-menu-mgmt">
+        <div class="admin-title">Menu Management</div>
+
+        <div class="data-table">
+          <div class="data-table-header">
+            <h3>Pizza Menu</h3>
+            <button class="action-btn" onclick="showToast('Feature coming soon!','info')">+ Add Pizza</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Pizza</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="menuMgmtBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Load the JavaScript -->
+<script src="app.js"></script>
+</body>
+</html>
