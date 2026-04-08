@@ -106,34 +106,7 @@ Features:
 
 ---
 
-📂 How to Run the Projects
 
-1. Clone the repository:
-   
-   git clone https://github.com/your-username/your-repository
-
-2. Navigate to the project folder:
-   
-   cd project-folder-name
-
-3. Open "index.html" in your browser (for frontend projects)
-
-4. For full-stack project:
-   
-   - Install dependencies:
-     npm install
-   - Run backend:
-     npm start
-   - Run frontend:
-     npm start
-
----
-
-🔗 GitHub Repository
-
-👉 https://github.com/your-username/your-repository
-
----
 
 📌 Conclusion
 
